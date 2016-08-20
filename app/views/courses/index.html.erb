@@ -1,0 +1,47 @@
+<div class="row">
+	<div class="col-md-3">
+		<ul class="sidebar-list">
+			<li class="sidebar-item"><%= link_to "Enrolled Courses", your_enrolled_courses_path, class: "sidebar-link" %></li>
+			<li class="sidebar-item"><%= link_to "Your Submitted Courses", courses_path, class: "sidebar-link active" %></li>
+			<li class="sidebar-item"><%= link_to "Your Students", your_students_path, class: "sidebar-link" %></li>
+		</ul>
+	</div>
+	<div class="col-md-9">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Courses
+			</div>
+			<div class="panel-body">
+				<% @courses.each do |course| %>
+					<div class="row">
+						<div class="col-md-2">
+							<%= image_tag course.photos[0].image.url(:thumb) if course.photos.length > 0 %>
+						</div>
+						<div class="col-md-7">
+							<h4><%= course.title %></h4> 
+							<span style="color:grey"><%= course.about %></span>
+							<br>
+							<span style="color:red">
+								<% if(course.price) %>
+										$<%= course.price %>
+								<% elsif(course.freeorpaid =="Free") %>
+									Free
+								<% end %>
+							</span>
+						</div>
+						<div class="col-md-3 right">
+							<%= link_to "Edit", edit_course_path(course), class: "btn btn-primary" %>
+						</div>
+					</div>
+					<hr>
+				<% end %>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<%= link_to "Submit New Course", new_course_path, class: "btn btn-primary" %>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,153 @@
+<div id="wrapper" class="col-md-12">
+
+	<div id="sidebar" class="col-md-3">
+		<div id="widget" class="sticky">
+			<div class="panel panel-default">
+				<div class="panel-body">
+			<%= search_form_for @search, url: search_path do |f| %>
+
+				<div class="row">
+					
+					<div class="col-md-12">
+						<% if params[:q] && params[:q]["freeorpaid_eq_any"] && (params[:q]["freeorpaid_eq_any"] == ["Free"] || params[:q]["freeorpaid_eq_any"] == ["Free", "Paid"]) %>
+    					<%= check_box_tag "q[freeorpaid_eq_any][]", "Free", checked: true %> Free Courses
+    					<% else %>
+    					<%= check_box_tag "q[freeorpaid_eq_any][]", "Free" %> Free Courses
+    					<% end %>
+
+					</div>
+					<div class="col-md-12">
+						<% if params[:q] && params[:q]["freeorpaid_eq_any"] && (params[:q]["freeorpaid_eq_any"] == ["Paid"] || params[:q]["freeorpaid_eq_any"] == ["Free", "Paid"]) %>
+    					<%= check_box_tag "q[freeorpaid_eq_any][]", "Paid", checked: true %> Paid Courses
+    					<% else %>
+						<%= check_box_tag "q[freeorpaid_eq_any][]", "Paid" %> Paid Courses
+						<% end %>
+					</div>
+					<div class="col-md-12">
+						<% if params[:q] && params[:q]["onlineorphysical_eq_any"] && (params[:q]["onlineorphysical_eq_any"] == ["Online"] || params[:q]["onlineorphysical_eq_any"] == ["Online", "Physical"]) %>
+						<%= check_box_tag "q[onlineorphysical_eq_any][]", "Online", checked: true %> Online Courses
+						<% else %>
+						<%= check_box_tag "q[onlineorphysical_eq_any][]", "Online" %> Online Courses
+						<% end %>
+					</div>
+					<div class="col-md-12">
+						<% if params[:q] && params[:q]["onlineorphysical_eq_any"] && (params[:q]["onlineorphysical_eq_any"] == ["Physical"] || params[:q]["onlineorphysical_eq_any"] == ["Online", "Physical"]) %>
+						<%= check_box_tag "q[onlineorphysical_eq_any][]", "Physical", checked: true %> Physical Courses
+
+						<% else %>
+						<%= check_box_tag "q[onlineorphysical_eq_any][]", "Physical" %> Physical Courses
+						<% end %>
+					</div>
+				
+				</div>
+
+				<hr>
+
+				<div class="row" style="text-align:center">
+					<%= f.submit "Filter", class: "btn btn-primary" %>
+				</div>
+
+				
+			<% end %>
+
+			
+
+
+			</div>
+		</div>
+		</div>
+	</div>
+
+	<div id="article" class="col-md-9">
+
+			
+			<%= form_tag search_path, method: :get do %>
+				<div class="row">
+					<div class="col-md-6">
+						<%= text_field_tag :search, params[:search], value: session[:name_search], class: "form-control" %>
+					</div>
+					<div class="col-md-2">
+						<%= submit_tag "Search", class: "btn btn-primary" %>
+					</div>
+				</div>
+			<% end %>
+
+		<div class="row">
+
+			<hr>
+
+			<div class="row" style="margin-bottom:20px;">
+				<div class="col-md-12">
+					<h3>
+						<% if params[:q] && params[:q]["freeorpaid_eq_any"] && (params[:q]["freeorpaid_eq_any"] == ["Free"] || params[:q]["freeorpaid_eq_any"] == ["Free", "Paid"]) %>
+						<i class="fa fa-check fa-lg" aria-hidden="true"></i> Free 
+
+						<% end %>
+
+						<% if params[:q] && params[:q]["freeorpaid_eq_any"] && (params[:q]["freeorpaid_eq_any"] == ["Paid"] || params[:q]["freeorpaid_eq_any"] == ["Free", "Paid"]) %>
+						 <i class="fa fa-usd fa-lg" aria-hidden="true"></i> Paid 
+						<% end %>
+						<% if params[:q] && params[:q]["onlineorphysical_eq_any"] && (params[:q]["onlineorphysical_eq_any"] == ["Online"] || params[:q]["onlineorphysical_eq_any"] == ["Online", "Physical"]) %>
+						<i class="fa fa-desktop fa-lg" aria-hidden="true"></i> Online 
+						<% end %>
+						<% if params[:q] && params[:q]["onlineorphysical_eq_any"] && (params[:q]["onlineorphysical_eq_any"] == ["Physical"] || params[:q]["onlineorphysical_eq_any"] == ["Online", "Physical"]) %>
+						<i class="fa fa-globe fa-lg" aria-hidden="true"></i> Physical 
+						<% end %>
+						Courses</h3>
+				</div>
+			</div>
+
+			<div class="row">
+				<% @arrCourses.each do |course| %>
+
+				<div class="col-md-4 clearfix">
+					<div class="panel panel-default">
+						<div class="panel-heading preview" id="searchthumb">
+							<%= link_to course do %>
+							<%= image_tag course.photos[0].image.url(:medium) if course.photos.length > 0 %>
+							<% end %>
+						</div>
+						<div class="panel-body">
+							<%= link_to course.title, course %>
+							<br>
+							<span style="color:red">
+								<% if(course.price) %>
+										$<%= course.price %>
+								<% elsif(course.freeorpaid =="Free") %>
+									Free
+								<% end %>
+				</span>
+				<br>
+				<span style="color:grey">
+								<% if((course.location) && (course.location!="")) %>
+										<%= course.location %>
+								<% elsif(course.onlineorphysical =="Online") %>
+									Online Course
+								<% end %>
+				</span>
+						</div>
+					</div>
+				</div>
+				<% end %>
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+
+<style>
+
+.col-md-4:nth-child(3n+4) {
+    clear: both;
+}
+
+</style>
+
+
+
+
+
+
+

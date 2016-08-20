@@ -1,0 +1,94 @@
+<div class="row">
+	<div class="col-md-3">
+		<div class="center">
+			<%= image_tag avatar_url(@user), class: "avatar-full" %>
+			<% if(current_user != @user) %>
+			<div class="row-space-2">
+				<% if current_user %>
+				<%= link_to "Send Message", conversations_path(sender_id: current_user.id, recipient_id: @user.id), method: 'post', class: "btn btn-primary wide" %>
+				<% end %>
+			</div>
+			<% end %>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">User Information</div>
+			<div class="panel-body">
+				<i class="fa fa-envelope" aria-hidden="true"></i><span>  <%= @user.email %></span><br>
+				<i class="fa fa-phone" aria-hidden="true"></i><span>  <%= @user.phone_number %></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<h2><%= @user.fullname %></h2>
+
+		<div class="description row-space-3">
+			"<%= @user.description %>"
+		</div>
+		<hr>
+		<h4>Submitted Courses (<%= @courses.length %>)</h4><br>
+		<div class="row">
+			<% @courses.each do |course| %>
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading preview">
+							<%= image_tag course.photos[0].image.url(:medium) if course.photos.length >0 %>
+						</div>
+						<div class="panel-body">
+							<%= link_to course.title, course_path(course) %>
+							<br>
+							<span style="color:red">
+											<% if(course.price) %>
+													$<%= course.price %>
+											<% elsif(course.freeorpaid =="Free") %>
+												Free
+											<% end %>
+							</span>
+							<br>
+							<span style="color:grey">
+											<% if((course.location) && (course.location!="")) %>
+													<%= course.location %>
+											<% elsif(course.onlineorphysical == "Online") %>
+												Online Course
+											<% end %>
+							</span>
+						</div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+
+		<hr>
+		<h4>User Reviews</h4><br>
+
+		<% @courses.each do |course| %>
+			<% if !course.reviews.blank? %>
+				<% course.reviews.each do |review| %>
+					<div class="row">
+						<div class="col-md-2 text-center">
+							<%= image_tag avatar_url(review.user), class: "img-circle avatar-medium" %><br>
+							<%= review.user.fullname %>
+						</div>
+						<div class="col-md-10">
+							<%= link_to course.title, course %><br>
+							<%= review.comment %><br>
+							<%= review.created_at.strftime("%v") %>
+							<hr>
+						</div>
+
+					</div>
+				<% end %>
+			<% end %>
+		<% end %>
+
+
+
+	</div>
+</div>
+
+<style>
+
+.col-md-4:nth-child(3n+4) {
+    clear: both;
+}
+
+</style>

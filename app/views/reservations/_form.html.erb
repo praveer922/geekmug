@@ -1,0 +1,45 @@
+
+<%= form_for([@course, @course.reservations.new]) do |f| %>
+
+	<span>Start Date:</span>
+	<%= f.text_field :start_date, readonly:'true', placeholder: 'Select Date', class: 'form-control' %>
+	<%= f.hidden_field :course_id, value: @course.id %>
+	<%= f.hidden_field :price, value: @course.price %>
+
+
+
+	<div id="preview" style="display:none">
+		<% if(@course.price) %>
+		<br>
+		<table class="reservation-table">
+			<tbody>
+				<tr>
+					<td>Total Cost:</td>
+					<td><span id="reservation_cost">$<%= @course.price %></span></td>
+				</tr>
+			</tbody>
+		</table>
+		<% end %>
+
+	</div>
+	<br>
+	<%= f.submit "Enroll Now", id: "btn_book", class: "btn btn-primary wide", disabled: 'true' %>
+	
+<% end %>
+
+<script>
+	$(function() {
+		var dateToday = new Date();
+		$('#reservation_start_date').datepicker({
+			dateFormat: 'dd-mm-yy',
+			minDate: dateToday,
+			onSelect: function(selected) {
+					$('#preview').show();
+					$('#btn_book').attr('disabled', false);
+			}
+		});
+	});
+</script>
+
+
+

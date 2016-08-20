@@ -1,0 +1,81 @@
+<div class="jumbotron">
+	<div class="row">
+		<h1 style="text-align:center; color:white;">Learn Anything.</h1>
+	<div class="col-md-3">
+	</div>
+	<div class="col-md-6">
+
+		<%= form_tag search_path, method: :get do %>
+	
+		<div class="col-md-12">
+			<%= text_field_tag :search, params[:search], placeholder: "Search Courses", class: "form-control" %>
+			<br>
+		</div>
+
+		<div style="text-align:center">
+			<br>
+			<%= submit_tag "Search", class: "btn btn-primary" %>
+		</div>
+	
+		<% end %>
+	</div>
+	</div>
+</div>
+
+<div class="text-center">
+	<h2>Popular Courses</h2>
+	<p>See what people are learning.</p>
+	<hr>
+</div>
+<br>
+<div class="row">
+	<% count =0 %>
+	<% @courses.each do |course| %>
+	<% break if (count >= 9) %>
+
+	<% count = count + 1 %>
+
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-heading preview">
+				<%= link_to course do %>
+				<%= image_tag course.photos[0].image.url(:medium) if course.photos.length > 0 %>
+				<% end %>
+			</div>
+			<div class="panel-body">
+				<%= link_to course.title, course %>
+				<br>
+				<span style="color:red">
+								<% if(course.price) %>
+										$<%= course.price %>
+								<% elsif(course.freeorpaid =="Free") %>
+									Free
+								<% end %>
+				</span>
+				<br>
+				<span style="color:grey">
+								<% if((course.location) && (course.location!="")) %>
+										<%= course.location %>
+								<% elsif(course.onlineorphysical == "Online") %>
+									Online Course
+								<% end %>
+				</span>
+			</div>
+		</div>
+	</div>
+	<% end %>
+</div>
+
+<div class="row text-center">
+	<hr>
+	<%= link_to "See all Courses", search_path, class: "btn btn-primary" %>
+	<hr>
+</div>
+
+<style>
+
+.col-md-4:nth-child(3n+4) {
+    clear: both;
+}
+
+</style>

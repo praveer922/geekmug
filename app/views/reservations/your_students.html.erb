@@ -1,0 +1,71 @@
+<div class="row">
+	<div class="col-md-3">
+		<ul class="sidebar-list">
+			
+			<li class="sidebar-item"><%= link_to "Enrolled Courses", your_enrolled_courses_path, class: "sidebar-link" %></li>
+			<li class="sidebar-item"><%= link_to "Your Submitted Courses", courses_path, class: "sidebar-link " %></li>
+			<li class="sidebar-item"><%= link_to "Your Students", your_students_path, class: "sidebar-link active" %></li>
+		</ul>
+	</div>
+	<div class="col-md-9">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Your Students
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-2">
+						<h4>Student:</h4>
+					</div>
+					<div class="col-md-10">
+						<h4>Course:</h4>
+					</div>
+				</div>
+				<hr>
+
+				<% @courses.each do |course| %>
+					<% course.reservations.each do |reservation| %>
+					<div class="row">
+						<div class="col-md-2">
+							
+							<%= link_to user_path(reservation.user) do %>
+							<%= image_tag avatar_url(reservation.user), class: "img-circle avatar-medium"%><br>
+							<h5><%= reservation.user.fullname %></h5>
+							<% end %>
+							
+						</div>
+						<div class="col-md-2">
+							<%= link_to course_path(reservation.course) do %>
+							<%= image_tag reservation.course.photos[0].image.url(:thumb) if reservation.course.photos.length > 0 %>
+							<% end %>
+						</div>
+						<div class="col-md-6">
+							<%= link_to course_path(reservation.course) do %>
+							<h4><%= reservation.course.title %></h4>
+							<% end %>
+							<%= reservation.course.about %><br>
+							<span style="color:red">
+								<% if(reservation.course.price) %>
+										$<%= reservation.course.price %>
+								<% elsif(reservation.course.freeorpaid =="Free") %>
+									Free
+								<% end %>
+							</span>
+
+						</div>
+						<div class="col-md-2">
+							<h5>Start Date:</h5>
+							<%= reservation.start_date.strftime('%v') %>
+						</div>
+						
+						
+					</div>
+					<hr>
+				<% end %>
+
+				<% end %>
+				
+			</div>
+		</div>
+	</div>
+</div>

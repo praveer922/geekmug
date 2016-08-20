@@ -1,0 +1,316 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+
+		<!-- MAIN INFO-->
+
+		<div class="row limit_width">
+			<div class="col-md-5">
+				<% if(@course.link and !(@course.link == "")) %>
+				<h1><a href=<%= @course.link %> style="color:inherit; text-decoration:inherit;" target="_blank"><%= @course.title %></a></h1>
+				<% else %>
+					<h1><%= @course.title %></h1>
+				<% end %>
+				<hr>
+				<h4><strong>Course Description: </strong></h4><span style="color:grey"><%= @course.about %></span>
+			</div>
+			<div class="col-md-4">
+				<%= image_tag @photos[0].image.url(), class: "img-responsive user_profile img-thumbnail" if @photos.length> 0 %>
+			</div>
+		</div>
+
+			
+
+		<br>
+
+		<div class="row limit_width">
+			<div class="col-md-9">
+
+				<div class="panel panel-default">
+				  <div class="panel-heading">
+				    <h2 class="panel-title">Created by:</h2>
+				  </div>
+				  <div class="panel-body">
+				  	<div class="row">
+					    <div class="col-md-3">
+					    <%= image_tag avatar_url(@course.user), class: "img-circle user_profile" %> </p>
+					    </div>
+					    
+					    <div class="col-md-9">
+					    	<div class="col-md-12">
+					    	<h3><%= @course.user.fullname %></h3>
+					    	<i class="fa fa-envelope" aria-hidden="true"></i><span>  <%= @course.user.email %></span><br>
+					    	<i class="fa fa-phone" aria-hidden="true"></i><span>  <%= @course.user.phone_number %></span><br><br>
+					    	<span style="color:grey">"<%= @course.user.description %>"</span>
+					    	</div>
+					    	
+					    	<div class="col-md-4">
+					    		<small><%= link_to "User Profile", @course.user, class: "btn btn-default" %></small>
+					    		
+					    	</div>
+					    </div>
+					</div>
+				  </div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-2">
+				<h4><strong>Basic Info:</strong></h4>
+			</div>
+
+			<div class="col-md-2" style="padding-top:10px">
+				<% if(@course.freeorpaid =="Free") %>
+				      		<i class="fa fa-check fa-lg" aria-hidden="true"></i> Free Course 
+				      	<% else %>
+				      		<i class="fa fa-usd fa-lg" aria-hidden="true"></i> Paid Course 
+				      	<% end %>
+			</div>
+
+			<div class="col-md-8" style="padding-top:10px">
+					<% if(@course.onlineorphysical =="Online") %>
+				      		<i class="fa fa-desktop fa-lg" aria-hidden="true"></i> Online Course 
+				      	<% else %>
+				      		<i class="fa fa-globe fa-lg" aria-hidden="true"></i> Physical Course 
+				      	<% end %>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+				<table class="fit">
+				  <tbody>
+				  	<% if(@course.price) %>
+					    <tr>
+					      <th scope="row">Price:</th>
+					      <td>$<%= @course.price %></td>
+					    </tr>
+				    <% end %>
+				    <% if(@course.location and !(@course.location == "")) %>
+					    <tr>
+					      <th scope="row">Location: </th>
+					      <td><%= @course.location %></td>
+					    </tr>
+				    <% end %>
+				    <tr>
+				      <th scope="row">Level:</th>
+				      <td><%= @course.level %></td>
+				    </tr>
+				    <% if(@course.language and !(@course.language == "")) %>
+				    <tr>
+				      <th scope="row">Language: </th>
+				      <td><%= @course.language %></td>
+				    </tr>
+				    <% end %>
+				    <tr>
+				      <th scope="row">User Ratings:</th>
+				      <td><span id="average_rating"></span> <br>Average User Rating <%= @course.average_rating %></td>
+				    </tr>
+				  </tbody>
+				</table>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+				<h4><strong>Syllabus:</strong></h4>
+				<span><%= @course.syllabus %></span>
+			</div>
+		</div>
+		<br>
+
+		<% if(@course.schedule and !(@course.schedule == "")) %>
+			<div class="row">
+				<div class="col-md-6">
+					<h4><strong>Schedule:</strong></h4>
+				<span><%= @course.schedule %></span>
+				</div>
+
+			</div>
+		<% end %>
+
+
+
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+			<h4><strong>Register:</strong></h4>
+				<hr>
+				<div class="col-md-6">
+				<% if(@course.onlineorphysical=="Physical") %>
+				
+						<!-- Reservation form -->
+						<%= render 'reservations/form' %>
+				
+				<% end %>
+				<br>
+				<% if(@course.link and !(@course.link == "")) %>
+					
+						
+							<%= link_to 'Go to Course <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i>'.html_safe, @course.link, class: "btn btn-primary" %> 
+				
+					
+				<% end %>
+				</div>
+			</div>
+		</div>
+		<br>
+
+		<!-- Reviews -->
+		<div class="row">
+			<div class="col-md-12">
+				<h4><strong>Ratings and Reviews:</strong></h4>
+				
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-body" style="text-align:center">
+							<span id="average_rating2"></span><br>
+							Rated <strong><%= @course.average_rating %> out of 5</strong> from <%= @reviews.count %> ratings
+						</div>
+					</div>
+					<div>
+						<%= render 'reviews/list' %>
+						<hr>
+					</div>
+					<div>
+						<%= render 'reviews/form' if !@hasReview %>
+					</div>
+					
+					
+				</div>
+			</div>
+		</div>
+
+		<!-- CAROUSEL -->
+		<% if(@photos.length>0) %>
+		<div class="row">
+			<div class="col-md-6">
+				<h4><strong>More Photos/Screenshots</strong></h4>
+				<hr>
+				<div id="myCarousel" class="carousel slide" data-ride="carousel">
+		  			<!-- Indicators -->
+		  		<% if @photos %>
+				  <ol class="carousel-indicators">
+				  	<% @photos.each do |photo| %>
+				    <li data-target="#myCarousel" data-slide-to="<%= photo.id %>" ></li>
+				    <% end %>
+				  </ol>
+				<% end %>
+				  <!-- Wrapper for slides -->
+				  <div class="carousel-inner" role="listbox">
+				    <% if @photos %>
+				    	<% @photos.each do |photo| %>
+						    <div class="item <%= 'active' if photo.id ==@photos[0].id %>">
+						      <%= image_tag photo.image.url() %>
+						    </div>
+					    <% end %>
+				    <% end %>
+				  </div>
+
+				  <!-- Left and right controls -->
+				  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+				    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				    <span class="sr-only">Previous</span>
+				  </a>
+				  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+				    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				    <span class="sr-only">Next</span>
+				  </a>
+				</div>
+
+			</div>
+			<% end %>
+
+			<!-- GOOGLE MAP -->
+			<% if (@course.location and !(@course.location=="")) %>
+			<div class="col-md-6">
+				<h4><strong>Location</strong><h4>
+				<hr>
+				 <div id="map"></div>
+
+				 <style>
+			      #map {
+			        width: 100%;
+			        height: 400px;
+			      }
+			    </style>
+
+			    <script>
+			      function initMap() {
+			        var mapDiv = document.getElementById('map');
+			        var map = new google.maps.Map(mapDiv, {
+			            center: {lat: <%= @course.latitude %>, lng: <%= @course.longitude %>},
+			            zoom: 14
+			        });
+
+			        var marker = new google.maps.Marker({
+			        	position: {lat: <%= @course.latitude %>, lng: <%= @course.longitude %>},
+			        });
+
+			        marker.setMap(map);
+			      }
+			    </script>
+			    <script async defer
+			        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYmMMNbfP7KK-pSVH1qpdkm_Zx_bFFIYg&callback=initMap">
+			    </script>
+			</div>
+
+			<!-- Nearby courses -->
+			<% if(@course.nearbys(10).length>0) %>
+			<div class="col-md-12">
+				<br>
+				<h4><strong>Other Nearby Courses</strong></h4>
+				<hr>
+				<% for course in @course.nearbys(10) %>
+					<% if (@course.location and !(course.location == "")) %>
+					<div class="col-md-3">
+						<div class="panel panel-default">
+							<div class="panel-heading preview">
+								<%= image_tag course.photos[0].image.url(:medium) if course.photos.length> 0%>
+							</div>
+							<div class="panel-body">
+								<%= link_to course.title, course %><br>
+								<% if(course.price) %>
+									$<%= course.price %>
+								<% elsif(course.freeorpaid =="Free") %>
+								Free
+								<% end %>
+								<br>(<%= course.distance.round(2)*1.609 %> km away)
+							</div>
+
+						</div>
+					</div>
+					<% end %>
+				<% end %>
+			</div>
+			<% end %>
+
+
+			<% end %>
+		</div>
+
+		<script>
+			$('#average_rating').raty({
+				path: '/assets',
+				readOnly: true,
+				score: <%= @course.average_rating %>
+			});
+		</script>
+
+		<script>
+			$('#average_rating2').raty({
+				path: '/assets',
+				readOnly: true,
+				score: <%= @course.average_rating %>
+			});
+		</script>
+
+		
+
+
+
+		
+
+
+	</div>
+</div>

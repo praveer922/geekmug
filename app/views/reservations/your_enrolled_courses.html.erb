@@ -1,0 +1,56 @@
+<div class="row">
+	<div class="col-md-3">
+		<ul class="sidebar-list">
+			
+			<li class="sidebar-item"><%= link_to "Enrolled Courses", your_enrolled_courses_path, class: "sidebar-link active" %></li>
+			<li class="sidebar-item"><%= link_to "Your Submitted Courses", courses_path, class: "sidebar-link " %></li>
+			<li class="sidebar-item"><%= link_to "Your Students", your_students_path, class: "sidebar-link" %></li>
+		</ul>
+	</div>
+	<div class="col-md-9">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Your Enrolled Courses
+			</div>
+			<div class="panel-body">
+				<% @enrolled_courses.each do |enrolled_course| %>
+					<div class="row">
+						<div class="col-md-2">
+							<%= link_to course_path(enrolled_course.course) do %>
+							<%= image_tag enrolled_course.course.photos[0].image.url(:thumb) if enrolled_course.course.photos.length > 0 %>
+							<% end %>
+						</div>
+						<div class="col-md-6">
+							<%= link_to course_path(enrolled_course.course) do %>
+							<h4><%= enrolled_course.course.title %></h4>
+							<% end %>
+							<%= enrolled_course.course.about %><br>
+							<span style="color:red">
+								<% if(enrolled_course.course.price) %>
+										$<%= enrolled_course.course.price %>
+								<% elsif(enrolled_course.course.freeorpaid =="Free") %>
+									Free
+								<% end %>
+							</span>
+
+						</div>
+						<div class="col-md-2">
+							<h5>Start Date:</h5>
+							<%= enrolled_course.start_date.strftime('%v') %>
+						</div>
+						
+						<div class="col-md-2">
+							<h5>Taught By:</h5>
+							<%= link_to user_path(enrolled_course.course.user) do %>
+							<%= image_tag avatar_url(enrolled_course.course.user), class: "img-circle avatar-medium"%><br>
+							<h5><%= enrolled_course.course.user.fullname %></h5>
+							<% end %>
+							
+						</div>
+					</div>
+					<hr>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</div>
